@@ -24,6 +24,7 @@ For install is necessary follow this steps:
     * `docker-compose up -d`
 * run this command for create tables
     * `docker-compose exec php php artisan migrate`
+    * If occur a error wait one minute and try again
 
 
 
