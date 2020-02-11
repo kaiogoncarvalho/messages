@@ -65,9 +65,10 @@ class MessagesService
     /**
      * @param int $id
      * @param int $userId
-     * @return Message
+     * @param array|null $headers
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getHistory(int $id, int $userId)
+    public function getHistory(int $id, int $userId, ?array $headers)
     {
         return MessageHistory::where(['message_id' => $id])
             ->where(['user_id' => $userId])->paginate(

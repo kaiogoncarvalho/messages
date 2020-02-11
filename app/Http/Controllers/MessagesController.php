@@ -109,9 +109,9 @@ class MessagesController extends Controller
      * @param UsersService $usersService
      * @return \App\Models\Message
      */
-    public function getHistory($id, MessagesService $messagesService, UsersService $usersService)
+    public function getHistory($id,Request $request, MessagesService $messagesService, UsersService $usersService)
     {
-        return $messagesService->getHistory($id, $usersService->getAuthUser()->id);
+        return $messagesService->getHistory($id, $usersService->getAuthUser()->id, $request->header());
     }
     
     /**
