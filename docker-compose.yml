@@ -1,0 +1,87 @@
+version: "3"
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 174.70.1.0/24
+
+services:
+
+  php:
+    container_name: messages_php
+    build:
+      context: docker/php
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: 174.70.1.3
+      DB_PORT: 3306
+      DB_DATABASE: messages
+      DB_USERNAME: root
+      DB_PASSWORD: secret
+      MONGO_DATABASE: messages
+      MONGO_USERNAME: user
+      MONGO_PASSWORD: secret
+      MONGO_HOST: mongo
+      MONGO_PORT: 27017
+      MONGO_OPTIONS_DATABASE: admin
+    volumes:
+      - .:/opt/messages:cached
+    networks:
+      default:
+         ipv4_address: 174.70.1.2
+
+  mysql:
+    container_name: messages_mysql
+    image: mysql:8.0.19
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: messages
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3307:3306
+    networks:
+      default:
+         ipv4_address: 174.70.1.3
+
+  web:
+    container_name: messages_web
+    image: nginx:latest
+    volumes:
+      - ./:/opt/messages:cached
+      - ./docker/nginx/site.conf:/etc/nginx/conf.d/site.conf
+    depends_on:
+      - php
+    ports:
+      - 8080:8080
+    networks:
+      default:
+         ipv4_address: 174.70.1.4
+
+
+  swagger:
+    image: swaggerapi/swagger-ui
+    environment:
+      API_URL: http://174.70.1.4:8080/v1/docs/swagger.yaml
+    ports:
+      - "7080:8080"
+    networks:
+      default:
+        ipv4_address: 174.70.1.5
+
+
+  mongo:
+    image: mongo:4-xenial
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: secret
+      MONGO_DB: messages
+    networks:
+      default:
+        ipv4_address: 174.70.1.6
+    ports:
+      - "27018:27017"
+

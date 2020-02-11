@@ -1,0 +1,20 @@
+components:
+  schema:
+    type: object
+    properties:
+      subject:
+        type: string
+        example: Subject of Message
+      content:
+        type: string
+        example: Content of Message
+      start_date:
+        type: string
+        example: "2020-02-04 01:03:22"
+        pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'
+      expiration_date:
+        type: string
+        example: "2020-02-04 01:03:22"
+        pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'
+
+

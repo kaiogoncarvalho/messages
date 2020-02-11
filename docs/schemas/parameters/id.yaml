@@ -1,0 +1,17 @@
+parameters:
+  messageId:
+    in: path
+    name: id
+    required: true
+    schema:
+      type: integer
+      minimum: 1
+    description: The Message ID
+  userId:
+    in: path
+    name: id
+    required: true
+    schema:
+      type: integer
+      minimum: 1
+    description: The User ID
